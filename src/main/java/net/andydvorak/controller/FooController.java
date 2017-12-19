@@ -24,35 +24,35 @@ import static com.google.common.base.Preconditions.checkState;
  */
 @Controller
 @RequestMapping("/test")
-final class FooController{
+final class FooController {
     @Autowired
     FooService fooService;
 
     final Logger logger = LoggerFactory.getLogger(FooController.class);
 
-    @RequestMapping( method = RequestMethod.GET )
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public final List<Foo> getAll(){
+    public final List<Foo> getAll() {
         return fooService.getAll();
     }
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.GET )
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
     @ResponseBody
-    public final Foo get( @PathVariable( "id" ) final Long id ){
+    public final Foo get(@PathVariable("id") final Long id) {
         return fooService.getById(id);
     }
 
-    @RequestMapping( method = RequestMethod.POST )
-    @ResponseStatus( HttpStatus.CREATED )
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    public final Long create( @RequestBody final Foo entity ){
+    public final Long create(@RequestBody final Foo entity) {
         checkNotNull(entity);
         return fooService.create(entity);
     }
 
-    @RequestMapping( method = RequestMethod.PUT )
-    @ResponseStatus( HttpStatus.OK )
-    public final void update( @RequestBody final Foo entity ){
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public final void update(@RequestBody final Foo entity) {
         checkNotNull(entity);
         if (fooService.exists(entity.getId())) {
             fooService.update(entity);
@@ -61,9 +61,9 @@ final class FooController{
         }
     }
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.PUT )
-    @ResponseStatus( HttpStatus.OK )
-    public final void update( @PathVariable( "id" ) final Long id, @RequestBody final Foo entity ){
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    @ResponseStatus(HttpStatus.OK)
+    public final void update(@PathVariable("id") final Long id, @RequestBody final Foo entity) {
         checkNotNull(entity);
         checkState(ObjectUtils.equals(id, entity.getId()));
         if (fooService.exists(id)) {
@@ -73,25 +73,29 @@ final class FooController{
         }
     }
 
-    @RequestMapping( value = "/{id}", method = RequestMethod.DELETE )
-    @ResponseStatus( HttpStatus.OK )
-    public final void delete( @PathVariable( "id" ) final Long id ){
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @ResponseStatus(HttpStatus.OK)
+    public final void delete(@PathVariable("id") final Long id) {
         fooService.deleteById(id);
     }
 
-    @ExceptionHandler( NotFoundException.class )
-    @ResponseStatus( value = HttpStatus.NOT_FOUND )
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(value = HttpStatus.NOT_FOUND)
     public void handleNotFoundException(final NotFoundException ex,
                                         final HttpServletResponse response) {
         logger.info("Handlng NotFoundException - Catching: "
                 + ex.getClass().getSimpleName());
     }
 
-    @ExceptionHandler( AlreadyExistsException.class )
-    @ResponseStatus( value = HttpStatus.CONFLICT )
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(value = HttpStatus.CONFLICT)
     public void handleAlreadyExistsException(final AlreadyExistsException ex,
                                              final HttpServletResponse response) {
         logger.info("Handlng AlreadyExistsException - Catching: "
                 + ex.getClass().getSimpleName());
+    }
+
+    public int multiply(int a, int b) {
+        return a * b;
     }
 }
